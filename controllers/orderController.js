@@ -41,13 +41,13 @@ exports.placeOrder = async (req, res) => {
             return OrderItem.create({ order_id: order.order_id, book_id: item.book_id, quantity: item.quantity });
         }));
 
-        // await CartItem.destroy({ where: { cart_id: cart.cart_id } });
-
-        // Clear cart items
         await CartItem.destroy({ where: { cart_id: cart.cart_id } });
 
-        // Reset the auto-increment value for cart_item_id
-        await sequelize.query('ALTER TABLE cart_items AUTO_INCREMENT = 1;');
+        // // Clear cart items
+        // await CartItem.destroy({ where: { cart_id: cart.cart_id } });
+
+        // // Reset the auto-increment value for cart_item_id
+        // await sequelize.query('ALTER TABLE cart_items AUTO_INCREMENT = 1;');
 
         res.status(201).json(order);
     } catch (error) {
@@ -71,16 +71,27 @@ exports.getOrderHistory = async (req, res) => {
 
 // Get order details
 exports.getOrderDetails = async (req, res) => {
-    console.log("API HITTING: getOrderDetails")
+    console.log("API HITTING: getOrderDetails");
     const { id } = req.params;
+    const userId = req.userId; 
 
     try {
-        const order = await Order.findByPk(id);
+        const order = await Order.findOne({ 
+            where: { 
+                order_id: id,
+                user_id: userId 
+            }
+        });
+
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
         }
 
-        const orderItems = await OrderItem.findAll({ where: { order_id: id }, include: [Book] });
+        const orderItems = await OrderItem.findAll({ 
+            where: { order_id: id },
+            include: { model: Book, attributes: ['price'] } 
+        });
+
         res.json({ order, items: orderItems });
     } catch (error) {
         res.status(500).json({ message: 'Error fetching order details', error });

@@ -7,5 +7,5 @@ module.exports = {
       dialect: 'mysql'
     },
     jwtSecret: process.env.JWT_SECRET || "secret",
-    version: `v1.0.1`
+    version: `v1.0.2`
 };

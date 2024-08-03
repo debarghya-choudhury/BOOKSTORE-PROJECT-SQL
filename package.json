@@ -1,6 +1,6 @@
 {
   "name": "bookstore-server",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "A simplified bookstore API with user authentication, cart management, and order processing.",
   "main": "app.js",
   "scripts": {

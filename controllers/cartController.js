@@ -12,7 +12,16 @@ exports.getCartDetails = async (req, res) => {
         }
 
         const items = await CartItem.findAll({ where: { cart_id: cart.cart_id }, include: [Book] });
-        res.json({ cart, items });
+        // res.json({ cart, items });
+
+        let totalPrice = items.reduce((total, item) => total + (item.quantity * item.Book.price), 0);
+        totalPrice = totalPrice.toFixed(2);
+        
+        res.json({
+            cart,
+            total_price: totalPrice,
+            items
+        });
     } catch (error) {
         res.status(500).json({ message: 'Error fetching cart details', error });
     }
@@ -46,12 +55,23 @@ exports.addToCart = async (req, res) => {
 exports.removeFromCart = async (req, res) => {
     console.log("API HITTING: removeFromCart");
     const { itemId } = req.params;
+    const userId = req.userId; 
 
     try {
-        const item = await CartItem.findOne({ where: { cart_item_id: itemId } });
+        const item = await CartItem.findOne({
+            where: { cart_item_id: itemId },
+            include: {
+                model: Cart,
+                attributes: ['user_id'] 
+            }
+        });
 
         if (!item) {
             return res.status(404).json({ message: 'Cart item not found' });
+        }
+
+        if (item.Cart.user_id !== userId) {
+            return res.status(403).json({ message: 'Forbidden: You cannot remove items from another user\'s cart' });
         }
 
         await CartItem.destroy({ where: { cart_item_id: itemId } });
@@ -61,4 +81,5 @@ exports.removeFromCart = async (req, res) => {
         res.status(500).json({ message: 'Error removing item from cart', error });
     }
 };
+
 
