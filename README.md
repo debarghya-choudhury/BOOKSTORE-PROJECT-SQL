@@ -27,13 +27,13 @@ Open your terminal and run:
 
 ```bash
 git clone https://github.com/debarghya-choudhury/BOOKSTORE-PROJECT-SQL.git
-cd bookstore-server
 ```
 
 ### 2. Install Dependencies
 
-```bash
 Run the following command to install the necessary Node.js packages:
+
+```bash
 npm install
 ```
 
@@ -48,7 +48,7 @@ PORT=3000
 
 ### 4. Set Up the Database
 
-Import the SQL script from the SQL Script folder into your MySQL database to create the required tables.
+Import the SQL script from the SQL Script folder (inside Others folder) into your MySQL database to create the required tables.
 Ensure that your MySQL server is running and accessible.
 
 ### 5. Start the Server
@@ -61,11 +61,11 @@ npm start
 
 ### 6. Test the API
 
-Open Postman and import the Postman collection file from the POSTMAN Collection folder.
+Open Postman and import the Postman collection file from the POSTMAN Collection folder (inside Others folder).
 Use the collection to test the various API endpoints.
 
 
 ## Additional Information
 
-The database schema is visualized in the DB Diagram folder.
+The database schema is visualized in the DB Diagram folder (inside Others folder).
 For any issues or questions, please refer to the project’s GitHub repository.
